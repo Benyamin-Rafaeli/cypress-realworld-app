@@ -55,7 +55,7 @@ linux-workflow: &linux-workflow
         start: yarn start:ci
         record: true
         parallel: true
-        parallelism: 4
+        parallelism: 1
         ci-build-id: ${CIRCLE_SHA1:0:8}
         group: API
         requires:
@@ -75,7 +75,7 @@ linux-workflow: &linux-workflow
         start: yarn start:ci
         record: true
         parallel: true
-        parallelism: 4
+        parallelism: 1
         ci-build-id: ${CIRCLE_SHA1:0:8}
         group: "UI - Chrome"
         requires:
@@ -95,7 +95,7 @@ linux-workflow: &linux-workflow
         start: yarn start:ci
         record: true
         parallel: true
-        parallelism: 4
+        parallelism: 1
         ci-build-id: ${CIRCLE_SHA1:0:8}
         group: "UI - Chrome - Mobile"
         requires:
@@ -114,7 +114,7 @@ linux-workflow: &linux-workflow
         start: yarn start:ci
         record: true
         parallel: true
-        parallelism: 4
+        parallelism: 1
         ci-build-id: ${CIRCLE_SHA1:0:8}
         group: "UI - Firefox"
         requires:
@@ -134,7 +134,7 @@ linux-workflow: &linux-workflow
         start: yarn start:ci
         record: true
         parallel: true
-        parallelism: 4
+        parallelism: 1
         ci-build-id: ${CIRCLE_SHA1:0:8}
         group: "UI - Firefox - Mobile"
         requires:
