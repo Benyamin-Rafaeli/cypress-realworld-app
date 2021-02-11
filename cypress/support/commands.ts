@@ -21,7 +21,7 @@ Cypress.Commands.add("visualSnapshot", (maybeName) => {
     // @ts-ignore
     widths: [cy.state("viewportWidth")],
     // @ts-ignore
-    minHeight: cy.state("viewportHeight"),
+    minHeight: cy.state("viewportHeight")
   });
 });
 
@@ -40,7 +40,7 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
     displayName: "LOGIN",
     message: [`🔐 Authenticating | ${username}`],
     // @ts-ignore
-    autoEnd: false,
+    autoEnd: false
   });
 
   cy.server();
@@ -70,9 +70,9 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
           username,
           password,
           rememberUser,
-          userId: loginUser.response.body.user?.id,
+          userId: loginUser.response.body.user?.id
         };
-      },
+      }
     });
 
     log.snapshot("after");
@@ -83,7 +83,7 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
 Cypress.Commands.add("loginByApi", (username, password = Cypress.env("defaultPassword")) => {
   return cy.request("POST", `${Cypress.env("apiUrl")}/login`, {
     username,
-    password,
+    password
   });
 });
 
@@ -102,9 +102,9 @@ Cypress.Commands.add("reactComponent", { prevSubject: "element" }, ($el) => {
     name: "component",
     consoleProps() {
       return {
-        component: domFiber,
+        component: domFiber
       };
-    },
+    }
   });
 
   return domFiber.return;
@@ -128,7 +128,7 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
     displayName: "LOGIN BY XSTATE",
     message: [`🔐 Authenticating | ${username}`],
     // @ts-ignore
-    autoEnd: false,
+    autoEnd: false
   });
 
   cy.server();
@@ -147,9 +147,9 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
           username,
           password,
           // @ts-ignore
-          userId: loginUser.response.body.user.id,
+          userId: loginUser.response.body.user.id
         };
-      },
+      }
     });
 
     log.snapshot("after");
@@ -166,7 +166,7 @@ Cypress.Commands.add("logoutByXstate", () => {
     displayName: "LOGOUT BY XSTATE",
     message: [`🔒 Logging out current user`],
     // @ts-ignore
-    autoEnd: false,
+    autoEnd: false
   });
 
   cy.window({ log: false }).then((win) => {
@@ -204,7 +204,7 @@ Cypress.Commands.add("createTransaction", (payload) => {
     autoEnd: false,
     consoleProps() {
       return payload;
-    },
+    }
   });
 
   return cy
@@ -218,7 +218,7 @@ Cypress.Commands.add("createTransaction", (payload) => {
       return win.createTransactionService.send("CREATE", {
         ...createPayload,
         senderId: payload.sender.id,
-        receiverId: payload.receiver.id,
+        receiverId: payload.receiver.id
       });
     })
     .then(() => {
@@ -237,9 +237,9 @@ Cypress.Commands.add("nextTransactionFeedPage", (service, page) => {
     consoleProps() {
       return {
         service,
-        page,
+        page
       };
-    },
+    }
   });
 
   return cy
@@ -265,9 +265,9 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
     consoleProps() {
       return {
         startDate,
-        endDate,
+        endDate
       };
-    },
+    }
   });
 
   const selectDate = (date: number) => {
@@ -299,7 +299,7 @@ Cypress.Commands.add("pickDateRange", (startDate, endDate) => {
 Cypress.Commands.add("database", (operation, entity, query, logTask = false) => {
   const params = {
     entity,
-    query,
+    query
   };
 
   const log = Cypress.log({
@@ -310,7 +310,7 @@ Cypress.Commands.add("database", (operation, entity, query, logTask = false) => 
     autoEnd: false,
     consoleProps() {
       return params;
-    },
+    }
   });
 
   return cy.task(`${operation}:database`, params, { log: logTask }).then((data) => {
