@@ -8,21 +8,28 @@ type NewTransactionTestCtx = {
   contact?: User;
 };
 
-describe("New Transaction", function () {
+describe("New Transaction", function() {
   const ctx: NewTransactionTestCtx = {};
 
-  beforeEach(function () {
+  beforeEach(function() {
     cy.task("db:seed");
 
-    cy.server();
-    cy.route("POST", "/transactions").as("createTransaction");
-
-    cy.route("GET", "/users").as("allUsers");
-    cy.route("GET", "/notifications").as("notifications");
-    cy.route("GET", "/transactions/public").as("publicTransactions");
-    cy.route("GET", "/transactions").as("personalTransactions");
-    cy.route("GET", "/users/search*").as("usersSearch");
-    cy.route("PATCH", "/transactions/*").as("updateTransaction");
+    // cy.server();
+    // cy.route("POST", "/transactions").as("createTransaction");
+    // cy.route("GET", "/users").as("allUsers");
+    // cy.route("GET", "/notifications").as("notifications");
+    // cy.route("GET", "/transactions/public").as("publicTransactions");
+    // cy.route("GET", "/transactions").as("personalTransactions");
+    // cy.route("GET", "/users/search*").as("usersSearch");
+    // cy.route("PATCH", "/transactions/*").as("updateTransaction");
+    // updated
+    cy.intercept("POST", "/transactions").as("createTransaction");
+    cy.intercept("GET", "/users").as("allUsers");
+    cy.intercept("GET", "/notifications").as("notifications");
+    cy.intercept("GET", "/transactions/public").as("publicTransactions");
+    cy.intercept("GET", "/transactions").as("personalTransactions");
+    cy.intercept("GET", "/users/search*").as("usersSearch");
+    cy.intercept("PATCH", "/transactions/*").as("updateTransaction");
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.allUsers = users;
@@ -33,10 +40,10 @@ describe("New Transaction", function () {
     });
   });
 
-  it("navigates to the new transaction form, selects a user and submits a transaction payment", function () {
+  it("navigates to the new transaction form, selects a user and submits a transaction payment", function() {
     const payment = {
       amount: "35",
-      description: "Sushi dinner 🍣",
+      description: "Sushi dinner 🍣"
     };
 
     cy.getBySelLike("new-transaction").click();
@@ -59,7 +66,7 @@ describe("New Transaction", function () {
       .and("have.text", "Transaction Submitted!");
 
     const updatedAccountBalance = Dinero({
-      amount: ctx.user!.balance - parseInt(payment.amount) * 100,
+      amount: ctx.user!.balance - parseInt(payment.amount) * 100
     }).toFormat();
 
     if (isMobile()) {
@@ -86,10 +93,10 @@ describe("New Transaction", function () {
     cy.visualSnapshot("Personal List Validate Transaction in List");
   });
 
-  it("navigates to the new transaction form, selects a user and submits a transaction request", function () {
+  it("navigates to the new transaction form, selects a user and submits a transaction request", function() {
     const request = {
       amount: "95",
-      description: "Fancy Hotel 🏨",
+      description: "Fancy Hotel 🏨"
     };
 
     cy.getBySelLike("new-transaction").click();
@@ -115,7 +122,7 @@ describe("New Transaction", function () {
     cy.visualSnapshot("Transaction Item Description in List");
   });
 
-  it("displays new transaction errors", function () {
+  it("displays new transaction errors", function() {
     cy.getBySelLike("new-transaction").click();
     cy.wait("@allUsers");
 
@@ -136,7 +143,7 @@ describe("New Transaction", function () {
     cy.visualSnapshot("New Transaction Errors with Submit Payment/Request Buttons Disabled");
   });
 
-  it("submits a transaction payment and verifies the deposit for the receiver", function () {
+  it("submits a transaction payment and verifies the deposit for the receiver", function() {
     cy.getBySel("nav-top-new-transaction").click();
 
     const transactionPayload = {
@@ -144,7 +151,7 @@ describe("New Transaction", function () {
       amount: 25,
       description: "Indian Food",
       sender: ctx.user,
-      receiver: ctx.contact,
+      receiver: ctx.contact
     };
 
     // first let's grab the current balance from the UI
@@ -178,7 +185,7 @@ describe("New Transaction", function () {
     cy.switchUser(ctx.contact!.username);
 
     const updatedAccountBalance = Dinero({
-      amount: ctx.contact!.balance + transactionPayload.amount * 100,
+      amount: ctx.contact!.balance + transactionPayload.amount * 100
     }).toFormat();
 
     if (isMobile()) {
@@ -189,13 +196,13 @@ describe("New Transaction", function () {
     cy.visualSnapshot("Verify Updated Sender Account Balance");
   });
 
-  it("submits a transaction request and accepts the request for the receiver", function () {
+  it("submits a transaction request and accepts the request for the receiver", function() {
     const transactionPayload = {
       transactionType: "request",
       amount: 100,
       description: "Fancy Hotel",
       sender: ctx.user,
-      receiver: ctx.contact,
+      receiver: ctx.contact
     };
 
     cy.getBySelLike("new-transaction").click();
@@ -228,7 +235,7 @@ describe("New Transaction", function () {
     cy.switchUser(ctx.user!.username);
 
     const updatedAccountBalance = Dinero({
-      amount: ctx.user!.balance + transactionPayload.amount * 100,
+      amount: ctx.user!.balance + transactionPayload.amount * 100
     }).toFormat();
 
     if (isMobile()) {
@@ -239,22 +246,22 @@ describe("New Transaction", function () {
     cy.visualSnapshot("Verify Updated Sender Account Balance");
   });
 
-  context("searches for a user by attribute", function () {
+  context("searches for a user by attribute", function() {
     const searchAttrs: (keyof User)[] = [
       "firstName",
       "lastName",
       "username",
       "email",
-      "phoneNumber",
+      "phoneNumber"
     ];
 
-    beforeEach(function () {
+    beforeEach(function() {
       cy.getBySelLike("new-transaction").click();
       cy.wait("@allUsers");
     });
 
     searchAttrs.forEach((attr: keyof User) => {
-      it(attr, function () {
+      it(attr, function() {
         const targetUser = ctx.allUsers![2];
 
         cy.log(`Searching by **${attr}**`);

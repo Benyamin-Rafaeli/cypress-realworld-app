@@ -1,13 +1,16 @@
 import { User } from "../../../src/models";
 import { isMobile } from "../../support/utils";
 
-describe("User Settings", function () {
-  beforeEach(function () {
+describe("User Settings", function() {
+  beforeEach(function() {
     cy.task("db:seed");
 
-    cy.server();
-    cy.route("PATCH", "/users/*").as("updateUser");
-    cy.route("GET", "/notifications").as("getNotifications");
+    // cy.server();
+    // cy.route("PATCH", "/users/*").as("updateUser");
+    // cy.route("GET", "/notifications").as("getNotifications");
+    // updated
+    cy.intercept("PATCH", "/users/*").as("updateUser");
+    cy.intercept("GET", "/notifications").as("getNotifications");
 
     cy.database("find", "users").then((user: User) => {
       cy.loginByXstate(user.username);
@@ -20,7 +23,7 @@ describe("User Settings", function () {
     cy.getBySel("sidenav-user-settings").click();
   });
 
-  it("renders the user settings form", function () {
+  it("renders the user settings form", function() {
     cy.wait("@getNotifications");
     cy.getBySel("user-settings-form").should("be.visible");
     cy.location("pathname").should("include", "/user/settings");
@@ -28,7 +31,7 @@ describe("User Settings", function () {
     cy.visualSnapshot("User Settings Form");
   });
 
-  it("should display user setting form errors", function () {
+  it("should display user setting form errors", function() {
     ["first", "last"].forEach((field) => {
       cy.getBySelLike(`${field}Name-input`).type("Abc").clear().blur();
       cy.get(`#user-settings-${field}Name-input-helper-text`)
@@ -60,7 +63,7 @@ describe("User Settings", function () {
     cy.visualSnapshot("User Settings Form Errors and Submit Disabled");
   });
 
-  it("updates first name, last name, email and phone number", function () {
+  it("updates first name, last name, email and phone number", function() {
     cy.getBySelLike("firstName").clear().type("New First Name");
     cy.getBySelLike("lastName").clear().type("New Last Name");
     cy.getBySelLike("email").clear().type("email@email.com");

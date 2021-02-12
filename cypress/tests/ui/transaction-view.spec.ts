@@ -5,21 +5,28 @@ type NewTransactionCtx = {
   authenticatedUser?: User;
 };
 
-describe("Transaction View", function () {
+describe("Transaction View", function() {
   const ctx: NewTransactionCtx = {};
 
-  beforeEach(function () {
+  beforeEach(function() {
     cy.task("db:seed");
 
-    cy.server();
-    cy.route("GET", "/transactions").as("personalTransactions");
-    cy.route("GET", "/transactions/public").as("publicTransactions");
-    cy.route("GET", "/transactions/*").as("getTransaction");
-    cy.route("PATCH", "/transactions/*").as("updateTransaction");
-
-    cy.route("GET", "/checkAuth").as("userProfile");
-    cy.route("GET", "/notifications").as("getNotifications");
-    cy.route("GET", "/bankAccounts").as("getBankAccounts");
+    // cy.server();
+    // cy.route("GET", "/transactions").as("personalTransactions");
+    // cy.route("GET", "/transactions/public").as("publicTransactions");
+    // cy.route("GET", "/transactions/*").as("getTransaction");
+    // cy.route("PATCH", "/transactions/*").as("updateTransaction");
+    // cy.route("GET", "/checkAuth").as("userProfile");
+    // cy.route("GET", "/notifications").as("getNotifications");
+    // cy.route("GET", "/bankAccounts").as("getBankAccounts");
+    // updated
+    cy.intercept("GET", "/transactions").as("personalTransactions");
+    cy.intercept("GET", "/transactions/public").as("publicTransactions");
+    cy.intercept("GET", "/transactions/*").as("getTransaction");
+    cy.intercept("PATCH", "/transactions/*").as("updateTransaction");
+    cy.intercept("GET", "/checkAuth").as("userProfile");
+    cy.intercept("GET", "/notifications").as("getNotifications");
+    cy.intercept("GET", "/bankAccounts").as("getBankAccounts");
 
     cy.database("find", "users").then((user: User) => {
       ctx.authenticatedUser = user;
@@ -30,7 +37,7 @@ describe("Transaction View", function () {
         receiverId: ctx.authenticatedUser.id,
         status: "pending",
         requestStatus: "pending",
-        requestResolvedAt: "",
+        requestResolvedAt: ""
       }).then((transaction: Transaction) => {
         ctx.transactionRequest = transaction;
       });
@@ -40,14 +47,14 @@ describe("Transaction View", function () {
     cy.wait("@personalTransactions");
   });
 
-  it("transactions navigation tabs are hidden on a transaction view page", function () {
+  it("transactions navigation tabs are hidden on a transaction view page", function() {
     cy.getBySelLike("transaction-item").first().click();
     cy.location("pathname").should("include", "/transaction");
     cy.getBySel("nav-transaction-tabs").should("not.exist");
     cy.visualSnapshot("Transaction Navigation Tabs Hidden");
   });
 
-  it("likes a transaction", function () {
+  it("likes a transaction", function() {
     cy.getBySelLike("transaction-item").first().click();
     cy.wait("@getTransaction");
 
@@ -57,7 +64,7 @@ describe("Transaction View", function () {
     cy.visualSnapshot("Transaction after Liked");
   });
 
-  it("comments on a transaction", function () {
+  it("comments on a transaction", function() {
     cy.getBySelLike("transaction-item").first().click();
     cy.wait("@getTransaction");
 
@@ -72,7 +79,7 @@ describe("Transaction View", function () {
     cy.visualSnapshot("Comment on Transaction");
   });
 
-  it("accepts a transaction request", function () {
+  it("accepts a transaction request", function() {
     cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
     cy.wait("@getTransaction");
 
@@ -82,7 +89,7 @@ describe("Transaction View", function () {
     cy.visualSnapshot("Transaction Accepted");
   });
 
-  it("rejects a transaction request", function () {
+  it("rejects a transaction request", function() {
     cy.visit(`/transaction/${ctx.transactionRequest!.id}`);
     cy.wait("@getTransaction");
 
@@ -92,11 +99,11 @@ describe("Transaction View", function () {
     cy.visualSnapshot("Transaction Rejected");
   });
 
-  it("does not display accept/reject buttons on completed request", function () {
+  it("does not display accept/reject buttons on completed request", function() {
     cy.database("find", "transactions", {
       receiverId: ctx.authenticatedUser!.id,
       status: "complete",
-      requestStatus: "accepted",
+      requestStatus: "accepted"
     }).then((transactionRequest) => {
       cy.visit(`/transaction/${transactionRequest!.id}`);
 

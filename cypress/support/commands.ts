@@ -43,9 +43,12 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
     autoEnd: false
   });
 
-  cy.server();
-  cy.route("POST", "/login").as("loginUser");
-  cy.route("GET", "checkAuth").as("getUserProfile");
+  // cy.server();
+  // cy.route("POST", "/login").as("loginUser");
+  // cy.route("GET", "checkAuth").as("getUserProfile");
+  // updated
+  cy.intercept("POST", "/login").as("loginUser");
+  cy.intercept("GET", "checkAuth").as("getUserProfile");
 
   cy.location("pathname", { log: false }).then((currentPath) => {
     if (currentPath !== signinPath) {
@@ -92,7 +95,6 @@ Cypress.Commands.add("reactComponent", { prevSubject: "element" }, ($el) => {
     throw new Error(`cy.component() requires element of length 1 but got ${$el.length}`);
   }
   // Query for key starting with __reactInternalInstance$ for React v16.x
-  //
   const key = Object.keys($el.get(0)).find((key) => key.startsWith("__reactFiber$"));
 
   // @ts-ignore
@@ -131,9 +133,13 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
     autoEnd: false
   });
 
-  cy.server();
-  cy.route("POST", "/login").as("loginUser");
-  cy.route("GET", "/checkAuth").as("getUserProfile");
+  // cy.server();
+  // cy.route("POST", "/login").as("loginUser");
+  // cy.route("GET", "/checkAuth").as("getUserProfile");
+  // updated
+  cy.intercept("POST", "/login").as("loginUser");
+  cy.intercept("GET", "/checkAuth").as("getUserProfile");
+
   cy.visit("/signin", { log: false }).then(() => {
     log.snapshot("before");
   });
@@ -158,8 +164,10 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
 });
 
 Cypress.Commands.add("logoutByXstate", () => {
-  cy.server();
-  cy.route("POST", "/logout").as("logoutUser");
+  // cy.server();
+  // cy.route("POST", "/logout").as("logoutUser");
+  // updated
+  cy.intercept("POST", "/logout").as("logoutUser");
 
   const log = Cypress.log({
     name: "logoutByXstate",

@@ -5,7 +5,7 @@ import {
   TransactionRequestStatus,
   TransactionResponseItem,
   Contact,
-  TransactionStatus,
+  TransactionStatus
 } from "../../../src/models";
 import { addDays, isWithinInterval, startOfDay } from "date-fns";
 import { startOfDayUTC, endOfDayUTC } from "../../../src/utils/transactionUtils";
@@ -19,7 +19,7 @@ type TransactionFeedsCtx = {
   contactIds?: string[];
 };
 
-describe("Transaction Feed", function () {
+describe("Transaction Feed", function() {
   const ctx: TransactionFeedsCtx = {};
 
   const feedViews = {
@@ -27,30 +27,36 @@ describe("Transaction Feed", function () {
       tab: "public-tab",
       tabLabel: "everyone",
       routeAlias: "publicTransactions",
-      service: "publicTransactionService",
+      service: "publicTransactionService"
     },
     contacts: {
       tab: "contacts-tab",
       tabLabel: "friends",
       routeAlias: "contactsTransactions",
-      service: "contactTransactionService",
+      service: "contactTransactionService"
     },
     personal: {
       tab: "personal-tab",
       tabLabel: "mine",
       routeAlias: "personalTransactions",
-      service: "personalTransactionService",
-    },
+      service: "personalTransactionService"
+    }
   };
 
-  beforeEach(function () {
+  beforeEach(function() {
     cy.task("db:seed");
 
-    cy.server();
-    cy.route("GET", "/notifications").as("notifications");
-    cy.route("/transactions*").as(feedViews.personal.routeAlias);
-    cy.route("/transactions/public*").as(feedViews.public.routeAlias);
-    cy.route("/transactions/contacts*").as(feedViews.contacts.routeAlias);
+    // cy.server();
+    // cy.route("GET", "/notifications").as("notifications");
+    // cy.route("/transactions*").as(feedViews.personal.routeAlias);
+    // cy.route("/transactions/public*").as(feedViews.public.routeAlias);
+    // cy.route("/transactions/contacts*").as(feedViews.contacts.routeAlias);
+    // updated
+    cy.intercept("GET", "/notifications").as("notifications");
+    cy.intercept("/transactions*").as(feedViews.personal.routeAlias);
+    cy.intercept("/transactions/public*").as(feedViews.public.routeAlias);
+    cy.intercept("/transactions/contacts*").as(feedViews.contacts.routeAlias);
+
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.user = users[0];
@@ -59,8 +65,8 @@ describe("Transaction Feed", function () {
       cy.loginByXstate(ctx.user.username);
     });
   });
-  describe("app layout and responsiveness", function () {
-    it("toggles the navigation drawer", function () {
+  describe("app layout and responsiveness", function() {
+    it("toggles the navigation drawer", function() {
       cy.wait("@notifications");
       if (isMobile()) {
         cy.getBySel("sidenav-home").should("not.exist");
@@ -85,11 +91,13 @@ describe("Transaction Feed", function () {
     });
   });
 
-  describe("renders and paginates all transaction feeds", function () {
-    it("renders transactions item variations in feed", function () {
-      cy.route("/transactions/public*", "fixture:public-transactions").as(
-        "mockedPublicTransactions"
-      );
+  describe("renders and paginates all transaction feeds", function() {
+    it("renders transactions item variations in feed", function() {
+
+      // cy.route("/transactions/public*", "fixture:public-transactions").as("mockedPublicTransactions");
+      // updated
+      cy.intercept("/transactions/public*", { fixture: "public-transactions.json" }).as("mockedPublicTransactions");
+
       cy.visit("/");
 
       cy.wait("@notifications");
@@ -98,8 +106,9 @@ describe("Transaction Feed", function () {
         .then((transactions) => {
           const getTransactionFromEl = ($el: JQuery<Element>): TransactionResponseItem => {
             const transactionId = $el.data("test").split("transaction-item-")[1];
+            // @ts-ignore
             return _.find(transactions, {
-              id: transactionId,
+              id: transactionId
             })!;
           };
 
@@ -107,7 +116,7 @@ describe("Transaction Feed", function () {
           cy.contains("[data-test*='transaction-item']", "paid").within(($el) => {
             const transaction = getTransactionFromEl($el);
             const formattedAmount = Dinero({
-              amount: transaction.amount,
+              amount: transaction.amount
             }).toFormat();
 
             expect([TransactionStatus.pending, TransactionStatus.complete]).to.include(
@@ -131,7 +140,7 @@ describe("Transaction Feed", function () {
           cy.contains("[data-test*='transaction-item']", "charged").within(($el) => {
             const transaction = getTransactionFromEl($el);
             const formattedAmount = Dinero({
-              amount: transaction.amount,
+              amount: transaction.amount
             }).toFormat();
 
             expect(TransactionStatus.complete).to.equal(transaction.status);
@@ -147,7 +156,7 @@ describe("Transaction Feed", function () {
           cy.contains("[data-test*='transaction-item']", "requested").within(($el) => {
             const transaction = getTransactionFromEl($el);
             const formattedAmount = Dinero({
-              amount: transaction.amount,
+              amount: transaction.amount
             }).toFormat();
 
             expect([TransactionStatus.pending, TransactionStatus.complete]).to.include(
@@ -155,7 +164,7 @@ describe("Transaction Feed", function () {
             );
             expect([
               TransactionRequestStatus.pending,
-              TransactionRequestStatus.rejected,
+              TransactionRequestStatus.rejected
             ]).to.include(transaction.requestStatus);
 
             cy.getBySelLike("amount")
@@ -167,7 +176,7 @@ describe("Transaction Feed", function () {
     });
 
     _.each(feedViews, (feed, feedName) => {
-      it(`paginates ${feedName} transaction feed`, function () {
+      it(`paginates ${feedName} transaction feed`, function() {
         cy.getBySelLike(feed.tab)
           .click()
           .should("have.class", "Mui-selected")
@@ -209,7 +218,7 @@ describe("Transaction Feed", function () {
     });
   });
 
-  describe("filters transaction feeds by date range", function () {
+  describe("filters transaction feeds by date range", function() {
     if (isMobile()) {
       it("closes date range picker modal", () => {
         cy.getBySelLike("filter-date-range-button").click({ force: true });
@@ -222,7 +231,7 @@ describe("Transaction Feed", function () {
     }
 
     _.each(feedViews, (feed, feedName) => {
-      it(`filters ${feedName} transaction feed by date range`, function () {
+      it(`filters ${feedName} transaction feed by date range`, function() {
         cy.database("find", "transactions").then((transaction: Transaction) => {
           const dateRangeStart = startOfDay(new Date(transaction.createdAt));
           const dateRangeEnd = endOfDayUTC(addDays(dateRangeStart, 1));
@@ -245,7 +254,7 @@ describe("Transaction Feed", function () {
                 expect(
                   isWithinInterval(createdAtDate, {
                     start: startOfDayUTC(dateRangeStart),
-                    end: dateRangeEnd,
+                    end: dateRangeEnd
                   }),
                   `transaction created date (${createdAtDate.toISOString()}) 
                   is within ${dateRangeStart.toISOString()} 
@@ -256,7 +265,7 @@ describe("Transaction Feed", function () {
 
           cy.log("Clearing date range filter. Data set should revert");
           cy.getBySelLike("filter-date-clear-button").click({
-            force: true,
+            force: true
           });
 
           cy.get("@unfilteredResults").then((unfilteredResults) => {
@@ -268,7 +277,7 @@ describe("Transaction Feed", function () {
         });
       });
 
-      it(`does not show ${feedName} transactions for out of range date limits`, function () {
+      it(`does not show ${feedName} transactions for out of range date limits`, function() {
         const dateRangeStart = startOfDay(new Date(2014, 1, 1));
         const dateRangeEnd = endOfDayUTC(addDays(dateRangeStart, 1));
 
@@ -289,27 +298,25 @@ describe("Transaction Feed", function () {
     });
   });
 
-  describe("filters transaction feeds by amount range", function () {
+  describe("filters transaction feeds by amount range", function() {
     const dollarAmountRange = {
       min: 200,
-      max: 800,
+      max: 800
     };
 
     _.each(feedViews, (feed, feedName) => {
-      it(`filters ${feedName} transaction feed by amount range`, function () {
+      it(`filters ${feedName} transaction feed by amount range`, function() {
         cy.getBySelLike(feed.tab).click({ force: true }).should("have.class", "Mui-selected");
 
         cy.wait(`@${feed.routeAlias}`).its("response.body.results").as("unfilteredResults");
 
         cy.setTransactionAmountRange(dollarAmountRange.min, dollarAmountRange.max);
 
-        cy.getBySelLike("filter-amount-range-text").should(
-          "contain",
-          `$${dollarAmountRange.min} - $${dollarAmountRange.max}`
-        );
+        cy.getBySelLike("filter-amount-range-text")
+          .should("contain", `$${dollarAmountRange.min} - $${dollarAmountRange.max}`);
 
+        // @ts-ignore
         cy.wait(`@${feed.routeAlias}`).then(({ response: { body }, url }) => {
-          // @ts-ignore
           const transactions = body.results as TransactionResponseItem[];
           const urlParams = new URLSearchParams(_.last(url.split("?")));
 
@@ -344,7 +351,7 @@ describe("Transaction Feed", function () {
         }
       });
 
-      it(`does not show ${feedName} transactions for out of range amount limits`, function () {
+      it(`does not show ${feedName} transactions for out of range amount limits`, function() {
         cy.getBySelLike(feed.tab).click();
         cy.wait(`@${feed.routeAlias}`);
 
@@ -364,7 +371,7 @@ describe("Transaction Feed", function () {
   });
 
   describe("Feed Item Visibility", () => {
-    it("mine feed only shows personal transactions", function () {
+    it("mine feed only shows personal transactions", function() {
       cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
         ctx.contactIds = contacts.map((contact) => contact.contactUserId);
       });
@@ -380,7 +387,7 @@ describe("Transaction Feed", function () {
       cy.visualSnapshot("Personal Transactions");
     });
 
-    it("first five items belong to contacts in public feed", function () {
+    it("first five items belong to contacts in public feed", function() {
       cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
         ctx.contactIds = contacts.map((contact) => contact.contactUserId);
       });
@@ -398,7 +405,7 @@ describe("Transaction Feed", function () {
       cy.visualSnapshot("First 5 Transaction Items belong to contacts");
     });
 
-    it("friends feed only shows contact transactions", function () {
+    it("friends feed only shows contact transactions", function() {
       cy.database("filter", "contacts", { userId: ctx.user!.id }).then((contacts: Contact[]) => {
         ctx.contactIds = contacts.map((contact) => contact.contactUserId);
       });

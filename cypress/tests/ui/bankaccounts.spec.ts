@@ -5,16 +5,20 @@ type BankAccountsTestCtx = {
   user?: User;
 };
 
-describe("Bank Accounts", function () {
+describe("Bank Accounts", function() {
   const ctx: BankAccountsTestCtx = {};
 
-  beforeEach(function () {
+  beforeEach(function() {
     cy.task("db:seed");
 
-    cy.server();
-    cy.route("POST", "/bankAccounts").as("createBankAccount");
-    cy.route("DELETE", "/bankAccounts/*").as("deleteBankAccount");
-    cy.route("GET", "/notifications").as("getNotifications");
+    // cy.server();
+    // cy.route("POST", "/bankAccounts").as("createBankAccount");
+    // cy.route("DELETE", "/bankAccounts/*").as("deleteBankAccount");
+    // cy.route("GET", "/notifications").as("getNotifications");
+    // updated
+    cy.intercept("POST", "/bankAccounts").as("createBankAccount");
+    cy.intercept("DELETE", "/bankAccounts").as("deleteBankAccount");
+    cy.intercept("GET", "/notifications").as("getNotifications");
 
     cy.database("find", "users").then((user: User) => {
       ctx.user = user;
@@ -23,7 +27,7 @@ describe("Bank Accounts", function () {
     });
   });
 
-  it("creates a new bank account", function () {
+  it("creates a new bank account", function() {
     cy.wait("@getNotifications");
     if (isMobile()) {
       cy.getBySel("sidenav-toggle").click();
@@ -50,7 +54,7 @@ describe("Bank Accounts", function () {
     cy.visualSnapshot("Bank Account Created");
   });
 
-  it("should display bank account form errors", function () {
+  it("should display bank account form errors", function() {
     cy.visit("/bankaccounts");
     cy.getBySel("bankaccount-new").click();
 
@@ -113,7 +117,7 @@ describe("Bank Accounts", function () {
     cy.visualSnapshot("Bank Account Form with Errors and Submit button disabled");
   });
 
-  it("soft deletes a bank account", function () {
+  it("soft deletes a bank account", function() {
     cy.visit("/bankaccounts");
     cy.getBySelLike("delete").first().click();
 
@@ -123,8 +127,10 @@ describe("Bank Accounts", function () {
   });
 
   // TODO: [enhancement] the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
-  it("renders an empty bank account list state with onboarding modal", function () {
-    cy.route("GET", "/bankAccounts", []).as("getBankAccounts");
+  it("renders an empty bank account list state with onboarding modal", function() {
+    // cy.route("GET", "/bankAccounts", []).as("getBankAccounts");
+    // updated
+    cy.intercept("GET", "/bankAccounts", []).as("getBankAccounts");
 
     cy.visit("/bankaccounts");
     cy.wait("@getBankAccounts");

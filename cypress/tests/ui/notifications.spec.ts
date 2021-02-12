@@ -7,17 +7,22 @@ type NotificationsCtx = {
   userC: User;
 };
 
-describe("Notifications", function () {
+describe("Notifications", function() {
   const ctx = {} as NotificationsCtx;
 
-  beforeEach(function () {
+  beforeEach(function() {
     cy.task("db:seed");
 
-    cy.server();
-    cy.route("GET", "/notifications").as("getNotifications");
-    cy.route("POST", "/transactions").as("createTransaction");
-    cy.route("PATCH", "/notifications/*").as("updateNotification");
-    cy.route("POST", "/comments/*").as("postComment");
+    // cy.server();
+    // cy.route("GET", "/notifications").as("getNotifications");
+    // cy.route("POST", "/transactions").as("createTransaction");
+    // cy.route("PATCH", "/notifications/*").as("updateNotification");
+    // cy.route("POST", "/comments/*").as("postComment");
+    // updated
+    cy.intercept("GET", "/notifications").as("getNotifications");
+    cy.intercept("POST", "/transactions").as("createTransaction");
+    cy.intercept("PATCH", "/notifications/*").as("updateNotification");
+    cy.intercept("POST", "/comments/*").as("postComment");
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.userA = users[0];
@@ -26,8 +31,8 @@ describe("Notifications", function () {
     });
   });
 
-  describe("notifications from user interactions", function () {
-    it("User A likes a transaction of User B; User B gets notification that User A liked transaction ", function () {
+  describe("notifications from user interactions", function() {
+    it("User A likes a transaction of User B; User B gets notification that User A liked transaction ", function() {
       cy.loginByXstate(ctx.userA.username);
       cy.wait("@getNotifications");
 
@@ -81,12 +86,12 @@ describe("Notifications", function () {
       cy.visualSnapshot("Notification count after notification dismissed");
     });
 
-    it("User C likes a transaction between User A and User B; User B and get notifications that User C liked transaction", function () {
+    it("User C likes a transaction between User A and User B; User B and get notifications that User C liked transaction", function() {
       cy.loginByXstate(ctx.userC.username);
 
       cy.database("find", "transactions", {
         senderId: ctx.userB.id,
-        receiverId: ctx.userA.id,
+        receiverId: ctx.userA.id
       }).then((transaction: Transaction) => {
         cy.visit(`/transaction/${transaction.id}`);
       });
@@ -129,7 +134,7 @@ describe("Notifications", function () {
       cy.visualSnapshot("User B Notified of User C Like");
     });
 
-    it("User A comments on a transaction of User B; User B gets notification that User A commented on their transaction", function () {
+    it("User A comments on a transaction of User B; User B gets notification that User A commented on their transaction", function() {
       cy.loginByXstate(ctx.userA.username);
       cy.visualSnapshot();
 
@@ -158,12 +163,12 @@ describe("Notifications", function () {
       cy.visualSnapshot("User A Notified of User B Comment");
     });
 
-    it("User C comments on a transaction between User A and User B; User A and B get notifications that User C commented on their transaction", function () {
+    it("User C comments on a transaction between User A and User B; User A and B get notifications that User C commented on their transaction", function() {
       cy.loginByXstate(ctx.userC.username);
 
       cy.database("find", "transactions", {
         senderId: ctx.userB.id,
-        receiverId: ctx.userA.id,
+        receiverId: ctx.userA.id
       }).then((transaction: Transaction) => {
         cy.visit(`/transaction/${transaction.id}`);
       });
@@ -199,7 +204,7 @@ describe("Notifications", function () {
       cy.visualSnapshot("User B Notified of User C Comment");
     });
 
-    it("User A sends a payment to User B", function () {
+    it("User A sends a payment to User B", function() {
       cy.loginByXstate(ctx.userA.username);
 
       cy.getBySelLike("new-transaction").click();
@@ -208,7 +213,7 @@ describe("Notifications", function () {
         amount: 30,
         description: "🍕Pizza",
         sender: ctx.userA,
-        receiver: ctx.userB,
+        receiver: ctx.userB
       });
       cy.wait("@createTransaction");
 
@@ -225,7 +230,7 @@ describe("Notifications", function () {
       cy.visualSnapshot("User B Notified of Payment");
     });
 
-    it("User A sends a payment request to User C", function () {
+    it("User A sends a payment request to User C", function() {
       cy.loginByXstate(ctx.userA.username);
 
       cy.getBySelLike("new-transaction").click();
@@ -234,7 +239,7 @@ describe("Notifications", function () {
         amount: 300,
         description: "🛫🛬 Airfare",
         sender: ctx.userA,
-        receiver: ctx.userC,
+        receiver: ctx.userC
       });
       cy.wait("@createTransaction");
 
@@ -249,8 +254,10 @@ describe("Notifications", function () {
     });
   });
 
-  it("renders an empty notifications state", function () {
-    cy.route("GET", "/notifications", []).as("notifications");
+  it("renders an empty notifications state", function() {
+    // cy.route("GET", "/notifications", []).as("notifications");
+    // updated
+    cy.intercept("GET", "/notifications", []).as("notifications");
 
     cy.loginByXstate(ctx.userA.username);
 
