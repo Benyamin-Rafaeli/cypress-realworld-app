@@ -73,7 +73,7 @@ linux-workflow: &linux-workflow
         command-prefix: npx percy exec --
         yarn: true
         start: yarn start:ci
-        record: true
+        record: false
         parallel: true
         parallelism: 1
         ci-build-id: ${CIRCLE_SHA1:0:8}
