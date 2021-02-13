@@ -117,6 +117,7 @@
     "list:dev:users": "cat data/database.json | json -a users | json -a id username",
     "types": "tsc --noEmit",
     "cypress:open": "cypress open",
+    "cyo": "cypress open",
     "cypress:open:mobile": "cypress open --config viewportWidth=375,viewportHeight=667",
     "cypress:run": "cypress run",
     "cypress:run:mobile": "cypress run --config viewportWidth=375,viewportHeight=667",

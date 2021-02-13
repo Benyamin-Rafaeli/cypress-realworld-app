@@ -2,12 +2,13 @@
   "baseUrl": "http://localhost:3000",
   "projectId": "8qbbt1",
   "integrationFolder": "cypress/tests",
+  "experimentalStudio": true,
   "viewportHeight": 1000,
   "viewportWidth": 1280,
   "firefoxGcInterval": null,
   "retries": {
-    "runMode": 2,
-    "openMode": 1
+    "runMode": 1,
+    "openMode": 0
   },
   "env": {
     "apiUrl": "http://localhost:3001",

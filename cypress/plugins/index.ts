@@ -22,6 +22,15 @@ export default (on, config) => {
     return Array.isArray(query) ? Promise.map(query, fetchData) : fetchData(query);
   };
 
+  on("before:browser:launch", async (browser = {}, launchOptions) => {
+
+    if (browser.name === "chrome" && browser.isHeaded) {
+      launchOptions.args.push("--auto-open-devtools-for-tabs");
+      return launchOptions;
+    }
+    return launchOptions;
+  });
+
   on("task", {
     percyHealthCheck,
     async "db:seed"() {
@@ -36,7 +45,7 @@ export default (on, config) => {
     },
     "find:database"(queryPayload) {
       return queryDatabase(queryPayload, (data, attrs) => _.find(data.results, attrs));
-    },
+    }
   });
 
   codeCoverageTask(on, config);
