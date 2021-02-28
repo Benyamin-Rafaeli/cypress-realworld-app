@@ -5,17 +5,11 @@ type BankAccountsTestCtx = {
   user?: User;
 };
 
-describe("Bank Accounts", function() {
+xdescribe("Bank Accounts", function() {
   const ctx: BankAccountsTestCtx = {};
 
   beforeEach(function() {
     cy.task("db:seed");
-
-    // cy.server();
-    // cy.route("POST", "/bankAccounts").as("createBankAccount");
-    // cy.route("DELETE", "/bankAccounts/*").as("deleteBankAccount");
-    // cy.route("GET", "/notifications").as("getNotifications");
-    // updated
     cy.intercept("POST", "/bankAccounts").as("createBankAccount");
     cy.intercept("DELETE", "/bankAccounts").as("deleteBankAccount");
     cy.intercept("GET", "/notifications").as("getNotifications");
@@ -128,8 +122,6 @@ describe("Bank Accounts", function() {
 
   // TODO: [enhancement] the onboarding modal assertion can be removed after adding "onboarded" flag to user profile
   it("renders an empty bank account list state with onboarding modal", function() {
-    // cy.route("GET", "/bankAccounts", []).as("getBankAccounts");
-    // updated
     cy.intercept("GET", "/bankAccounts", []).as("getBankAccounts");
 
     cy.visit("/bankaccounts");

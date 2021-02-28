@@ -6,10 +6,10 @@ type TestBankTransferCtx = {
   authenticatedUser?: User;
 };
 
-describe("Bank Transfer API", function () {
+xdescribe("Bank Transfer API", function() {
   let ctx: TestBankTransferCtx = {};
 
-  beforeEach(function () {
+  beforeEach(function() {
     cy.task("db:seed");
 
     cy.database("find", "users").then((user: User) => {
@@ -19,8 +19,8 @@ describe("Bank Transfer API", function () {
     });
   });
 
-  context("GET /bankTransfer", function () {
-    it("gets a list of bank transfers for user", function () {
+  context("GET /bankTransfer", function() {
+    it("gets a list of bank transfers for user", function() {
       const { id: userId } = ctx.authenticatedUser!;
       cy.request("GET", `${apiBankTransfer}`).then((response) => {
         expect(response.status).to.eq(200);

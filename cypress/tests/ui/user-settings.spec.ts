@@ -1,14 +1,9 @@
 import { User } from "../../../src/models";
 import { isMobile } from "../../support/utils";
 
-describe("User Settings", function() {
+xdescribe("User Settings", function() {
   beforeEach(function() {
     cy.task("db:seed");
-
-    // cy.server();
-    // cy.route("PATCH", "/users/*").as("updateUser");
-    // cy.route("GET", "/notifications").as("getNotifications");
-    // updated
     cy.intercept("PATCH", "/users/*").as("updateUser");
     cy.intercept("GET", "/notifications").as("getNotifications");
 

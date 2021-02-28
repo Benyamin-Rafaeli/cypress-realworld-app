@@ -5,21 +5,11 @@ type NewTransactionCtx = {
   authenticatedUser?: User;
 };
 
-describe("Transaction View", function() {
+xdescribe("Transaction View", function() {
   const ctx: NewTransactionCtx = {};
 
   beforeEach(function() {
     cy.task("db:seed");
-
-    // cy.server();
-    // cy.route("GET", "/transactions").as("personalTransactions");
-    // cy.route("GET", "/transactions/public").as("publicTransactions");
-    // cy.route("GET", "/transactions/*").as("getTransaction");
-    // cy.route("PATCH", "/transactions/*").as("updateTransaction");
-    // cy.route("GET", "/checkAuth").as("userProfile");
-    // cy.route("GET", "/notifications").as("getNotifications");
-    // cy.route("GET", "/bankAccounts").as("getBankAccounts");
-    // updated
     cy.intercept("GET", "/transactions").as("personalTransactions");
     cy.intercept("GET", "/transactions/public").as("publicTransactions");
     cy.intercept("GET", "/transactions/*").as("getTransaction");

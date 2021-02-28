@@ -10,10 +10,10 @@ type TestLikesCtx = {
   transactionId?: string;
 };
 
-describe("Likes API", function () {
+xdescribe("Likes API", function() {
   let ctx: TestLikesCtx = {};
 
-  beforeEach(function () {
+  beforeEach(function() {
     cy.task("db:seed");
 
     cy.database("filter", "users").then((users: User[]) => {
@@ -27,8 +27,8 @@ describe("Likes API", function () {
     });
   });
 
-  context("GET /likes/:transactionId", function () {
-    it("gets a list of likes for a transaction", function () {
+  context("GET /likes/:transactionId", function() {
+    it("gets a list of likes for a transaction", function() {
       cy.request("GET", `${apiLikes}/${ctx.transactionId}`).then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body.likes.length).to.eq(1);
@@ -36,10 +36,10 @@ describe("Likes API", function () {
     });
   });
 
-  context("POST /likes/:transactionId", function () {
-    it("creates a new like for a transaction", function () {
+  context("POST /likes/:transactionId", function() {
+    it("creates a new like for a transaction", function() {
       cy.request("POST", `${apiLikes}/${ctx.transactionId}`, {
-        transactionId: ctx.transactionId,
+        transactionId: ctx.transactionId
       }).then((response) => {
         expect(response.status).to.eq(200);
       });

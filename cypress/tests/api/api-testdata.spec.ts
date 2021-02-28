@@ -9,10 +9,10 @@ type TestDataCtx = {
   authenticatedUser?: User;
 };
 
-describe("Test Data API", function () {
+xdescribe("Test Data API", function() {
   let ctx: TestDataCtx = {};
 
-  beforeEach(function () {
+  beforeEach(function() {
     cy.task("db:seed");
 
     cy.database("filter", "users").then((users: User[]) => {
@@ -22,7 +22,7 @@ describe("Test Data API", function () {
     });
   });
 
-  context("GET /testData/:entity", function () {
+  context("GET /testData/:entity", function() {
     Cypress._.each(
       [
         "users",
@@ -32,10 +32,10 @@ describe("Test Data API", function () {
         "transactions",
         "likes",
         "comments",
-        "banktransfers",
+        "banktransfers"
       ],
       (entity) => {
-        it(`gets remote mock data for ${entity}`, function () {
+        it(`gets remote mock data for ${entity}`, function() {
           cy.request("GET", `${apiTestData}/${entity}`).then((response) => {
             expect(response.status).to.eq(200);
             expect(response.body.results.length).to.be.greaterThan(1);

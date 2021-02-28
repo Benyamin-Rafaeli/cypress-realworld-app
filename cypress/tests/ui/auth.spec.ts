@@ -4,11 +4,6 @@ import { isMobile } from "../../support/utils";
 describe("User Sign-up and Login", function () {
   beforeEach(function () {
     cy.task("db:seed");
-
-    // cy.server();
-    // cy.route("POST", "/users").as("signup");
-    // cy.route("POST", "/bankAccounts").as("createBankAccount");
-    // updated
     cy.intercept("POST", "/users").as("signup");
     cy.intercept("POST", "/bankAccounts").as("createBankAccount");
   });

@@ -10,8 +10,6 @@ describe("Cypress Studio Demo", function() {
   });
 
   it("create new transaction", function() {
-    /* ==== Generated with Cypress Studio ==== */
-
     // cy.get("[data-test=nav-personal-tab] > .MuiTab-wrapper").click();
     cy.getBySelLike("nav-personal-tab").click();
     cy.get(".MuiButton-label").click();
@@ -22,11 +20,6 @@ describe("Cypress Studio Demo", function() {
     cy.getBySelLike("transaction-create-submit-payment").click({ force: true });
     // cy.get("[data-test=transaction-create-submit-payment] > .MuiButton-label").click({ force: true });
     cy.getBySelLike("alert-bar-success").should("contain", "Transaction Submitted!");
-
-    // /* ==== End Cypress Studio ==== */
   });
 
-  it.skip("create new bank account", function() {
-    // Extend test with Cypress Studio
-  });
 });

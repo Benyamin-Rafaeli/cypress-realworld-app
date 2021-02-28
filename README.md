@@ -20,7 +20,7 @@
   <a href="https://percy.io/cypress-io/cypress-realworld-app">
     <img src="https://percy.io/static/images/percy-badge.svg" />
   </a>
-  
+
    <a href="#contributors-">
     <img src="https://img.shields.io/badge/all_contributors-6-green.svg?style=flat" />
   </a>
@@ -41,16 +41,19 @@ A payment application to demonstrate <strong>real-world</strong> usage of <a hre
 > Happy Testing
 
 ---
+
 ## ToDo
 
-local parallel 
-add smoke tests 
-run by labels 
-allure reporting
+local parallel <br>
+add smoke tests <br>
+run by labels <br>
+allure reporting <br>
+grafana monitoring
 
 ## Features
 
-🛠 Built with [React][reactjs], [XState][xstate], [Express][express], [lowdb][lowdb], [Material-UI][material-ui] and [TypeScript][typescript]  
+🛠 Built with [React][reactjs], [XState][xstate], [Express][express], [lowdb][lowdb], [Material-UI][material-ui]
+and [TypeScript][typescript]  
 ⚡️ Zero database dependencies  
 🚀 Full-stack [Express][express]/[React][reactjs] application with real-world features and tests  
 👮‍♂️ Local Authentication  
@@ -61,7 +64,8 @@ allure reporting
 
 The Cypress Real-World App (RWA) is a full-stack Express/React application backed by a local JSON database ([lowdb]).
 
-The app is bundled with [example data](./data/database.json) (`data/database.json`) that contains everything you need to start using the app and run tests out-of-the-box.
+The app is bundled with [example data](./data/database.json) (`data/database.json`) that contains everything you need to
+start using the app and run tests out-of-the-box.
 
 > 🚩 **Note**
 >
@@ -70,7 +74,8 @@ The app is bundled with [example data](./data/database.json) (`data/database.jso
 
 ### Prerequisites
 
-The only requirement for this project is to have [Node.js](https://nodejs.org/en/) **version 12** installed on your machine. Refer to the [.node-version](./.node-version) file for the exact version.
+The only requirement for this project is to have [Node.js](https://nodejs.org/en/) **version 12** installed on your
+machine. Refer to the [.node-version](./.node-version) file for the exact version.
 
 TypeScript will be added as a local dependency to the project, so no need to install it.
 
@@ -104,13 +109,16 @@ yarn cypress:open
 
 - The local JSON database located in [data/database.json](./data/database.json) and is managed with [lowdb].
 
-- The database is [reseeded](./data/database-seed.json) each time the application is started (via `yarn dev`). Database seeding is done in between each [Cypress End-to-End test](./cypress/tests).
+- The database is [reseeded](./data/database-seed.json) each time the application is started (via `yarn dev`). Database
+  seeding is done in between each [Cypress End-to-End test](./cypress/tests).
 
-- Updates via the React frontend are sent to the [Express][express] server and handled by a set of [database utilities](backend/database.ts)
+- Updates via the React frontend are sent to the [Express][express] server and handled by a set
+  of [database utilities](backend/database.ts)
 
 - Generate a new database using `yarn db:seed`.
 
-- An [empty database seed](./data/empty-seed.json) is provided along with a script (`yarn start:empty`) to view the application without data.
+- An [empty database seed](./data/empty-seed.json) is provided along with a script (`yarn start:empty`) to view the
+  application without data.
 
 ## Additional NPM Scripts
 
@@ -128,7 +136,8 @@ For a complete list of scripts see [package.json](./package.json)
 
 ## Code Coverage Report
 
-The Cypress Real-World App uses the [@cypress/code-coverage](https://github.com/cypress-io/code-coverage) plugin to generate code coverage reports for the app frontend and backend.
+The Cypress Real-World App uses the [@cypress/code-coverage](https://github.com/cypress-io/code-coverage) plugin to
+generate code coverage reports for the app frontend and backend.
 
 To generate a code coverage report:
 
@@ -142,11 +151,17 @@ To generate a code coverage report:
 This project is licensed under the terms of the [MIT license](/LICENSE).
 
 [reactjs]: https://reactjs.org
+
 [xstate]: https://xstate.js.org
+
 [express]: https://expressjs.com
+
 [lowdb]: https://github.com/typicode/lowdb
+
 [typescript]: https://typescriptlang.org
+
 [cypressdashboard]: https://dashboard.cypress.io/projects/7s5okt/runs
+
 [material-ui]: https://material-ui.com
 
 ## Contributors ✨
@@ -172,4 +187,5 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.
+Contributions of any kind welcome!

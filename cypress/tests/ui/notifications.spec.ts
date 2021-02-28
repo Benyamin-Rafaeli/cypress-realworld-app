@@ -7,18 +7,11 @@ type NotificationsCtx = {
   userC: User;
 };
 
-describe("Notifications", function() {
+xdescribe("Notifications", function() {
   const ctx = {} as NotificationsCtx;
 
   beforeEach(function() {
     cy.task("db:seed");
-
-    // cy.server();
-    // cy.route("GET", "/notifications").as("getNotifications");
-    // cy.route("POST", "/transactions").as("createTransaction");
-    // cy.route("PATCH", "/notifications/*").as("updateNotification");
-    // cy.route("POST", "/comments/*").as("postComment");
-    // updated
     cy.intercept("GET", "/notifications").as("getNotifications");
     cy.intercept("POST", "/transactions").as("createTransaction");
     cy.intercept("PATCH", "/notifications/*").as("updateNotification");

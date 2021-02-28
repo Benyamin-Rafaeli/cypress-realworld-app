@@ -19,7 +19,7 @@ type TransactionFeedsCtx = {
   contactIds?: string[];
 };
 
-describe("Transaction Feed", function() {
+xdescribe("Transaction Feed", function() {
   const ctx: TransactionFeedsCtx = {};
 
   const feedViews = {
@@ -45,18 +45,10 @@ describe("Transaction Feed", function() {
 
   beforeEach(function() {
     cy.task("db:seed");
-
-    // cy.server();
-    // cy.route("GET", "/notifications").as("notifications");
-    // cy.route("/transactions*").as(feedViews.personal.routeAlias);
-    // cy.route("/transactions/public*").as(feedViews.public.routeAlias);
-    // cy.route("/transactions/contacts*").as(feedViews.contacts.routeAlias);
-    // updated
     cy.intercept("GET", "/notifications").as("notifications");
     cy.intercept("/transactions*").as(feedViews.personal.routeAlias);
     cy.intercept("/transactions/public*").as(feedViews.public.routeAlias);
     cy.intercept("/transactions/contacts*").as(feedViews.contacts.routeAlias);
-
 
     cy.database("filter", "users").then((users: User[]) => {
       ctx.user = users[0];
@@ -93,9 +85,6 @@ describe("Transaction Feed", function() {
 
   describe("renders and paginates all transaction feeds", function() {
     it("renders transactions item variations in feed", function() {
-
-      // cy.route("/transactions/public*", "fixture:public-transactions").as("mockedPublicTransactions");
-      // updated
       cy.intercept("/transactions/public*", { fixture: "public-transactions.json" }).as("mockedPublicTransactions");
 
       cy.visit("/");

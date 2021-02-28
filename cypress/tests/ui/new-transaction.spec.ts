@@ -8,21 +8,11 @@ type NewTransactionTestCtx = {
   contact?: User;
 };
 
-describe("New Transaction", function() {
+xdescribe("New Transaction", function() {
   const ctx: NewTransactionTestCtx = {};
 
   beforeEach(function() {
     cy.task("db:seed");
-
-    // cy.server();
-    // cy.route("POST", "/transactions").as("createTransaction");
-    // cy.route("GET", "/users").as("allUsers");
-    // cy.route("GET", "/notifications").as("notifications");
-    // cy.route("GET", "/transactions/public").as("publicTransactions");
-    // cy.route("GET", "/transactions").as("personalTransactions");
-    // cy.route("GET", "/users/search*").as("usersSearch");
-    // cy.route("PATCH", "/transactions/*").as("updateTransaction");
-    // updated
     cy.intercept("POST", "/transactions").as("createTransaction");
     cy.intercept("GET", "/users").as("allUsers");
     cy.intercept("GET", "/notifications").as("notifications");

@@ -10,10 +10,10 @@ type TestCommentsCtx = {
   transactionId?: string;
 };
 
-describe("Comments API", function () {
+xdescribe("Comments API", function() {
   let ctx: TestCommentsCtx = {};
 
-  beforeEach(function () {
+  beforeEach(function() {
     cy.task("db:seed");
 
     cy.database("filter", "users").then((users: User[]) => {
@@ -27,8 +27,8 @@ describe("Comments API", function () {
     });
   });
 
-  context("GET /comments/:transactionId", function () {
-    it("gets a list of comments for a transaction", function () {
+  context("GET /comments/:transactionId", function() {
+    it("gets a list of comments for a transaction", function() {
       cy.request("GET", `${apiComments}/${ctx.transactionId}`).then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body.comments.length).to.eq(1);
@@ -36,10 +36,10 @@ describe("Comments API", function () {
     });
   });
 
-  context("POST /comments/:transactionId", function () {
-    it("creates a new comment for a transaction", function () {
+  context("POST /comments/:transactionId", function() {
+    it("creates a new comment for a transaction", function() {
       cy.request("POST", `${apiComments}/${ctx.transactionId}`, {
-        content: "This is my comment",
+        content: "This is my comment"
       }).then((response) => {
         expect(response.status).to.eq(200);
       });
