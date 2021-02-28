@@ -83,25 +83,25 @@ linux-workflow: &linux-workflow
         post-steps:
           - report-coverage
 
-#    # Run E2E tests in Chrome with mobile device viewport
-#    - cypress/run:
-#        name: "UI Tests - Chrome - Mobile"
-#        browser: chrome
-#        spec: cypress/tests/ui/*
-#        config: "viewportWidth=375,viewportHeight=667"
-#        executor: with-chrome-and-firefox
-#        wait-on: "http://localhost:3000"
-#        yarn: true
-#        start: yarn start:ci
-#        record: true
-#        parallel: true
-#        parallelism: 1
-#        ci-build-id: ${CIRCLE_SHA1:0:8}
-#        group: "UI - Chrome - Mobile"
-#        requires:
-#          - Setup Linux
-#        post-steps:
-#          - report-coverage
+    # Run E2E tests in Chrome with mobile device viewport
+    - cypress/run:
+        name: "UI Tests - Chrome - Mobile"
+        browser: chrome
+        spec: cypress/tests/ui/*
+        config: "viewportWidth=375,viewportHeight=667"
+        executor: with-chrome-and-firefox
+        wait-on: "http://localhost:3000"
+        yarn: true
+        start: yarn start:ci
+        record: true
+        parallel: true
+        parallelism: 1
+        ci-build-id: ${CIRCLE_SHA1:0:8}
+        group: "UI - Chrome - Mobile"
+        requires:
+          - Setup Linux
+        post-steps:
+          - report-coverage
 
 #    # Run E2E tests in Firefox
 #    - cypress/run:
