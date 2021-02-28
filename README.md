@@ -50,6 +50,11 @@ run by labels <br>
 allure reporting <br>
 grafana monitoring
 
+## Cypress Dashboard
+
+https://dashboard.cypress.io/projects/8qbbt1/runs
+
+
 ## Features
 
 🛠 Built with [React][reactjs], [XState][xstate], [Express][express], [lowdb][lowdb], [Material-UI][material-ui]
