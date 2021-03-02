@@ -1,0 +1,34 @@
+@startuml
+title API Project
+
+component [    Cypress\nAPI Recorder] as GUI
+GUI -right-> [WebSite]
+
+node "Container" {
+    [Business Logic \nPermutations AI]
+    database "DB\n" {
+        [Stored End Points 1]
+    }
+}
+
+database "DB\n" {
+    [Stored End Points 1] -down-> [Stored End Points 2]
+    [Stored End Points 2] -down-> [Stored End Points 3]
+}
+
+GUI -down-> [Business Logic \nPermutations AI]
+[Business Logic \nPermutations AI] .. [Stored End Points 1]
+node "API" {
+    [Stored End Points 1] -right-> [End Points 1]
+    [End Points 1] -down-> [End Points 2]
+    [Stored End Points 2] -right-> [End Points 2]
+    [End Points 2] -down-> [End Points 3]
+    [Stored End Points 3] -right-> [End Points 3]
+}
+
+node "ToDo" {
+ [Disaster Recovery] -down-> [Logging]
+ [Logging] -down-> [Interservice Communication]
+ [Interservice Communication] -down-> [message formats supported]
+}
+@enduml
