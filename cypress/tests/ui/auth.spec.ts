@@ -2,6 +2,7 @@ import { User } from "../../../src/models";
 import { isMobile } from "../../support/utils";
 
 describe("User Sign-up and Login", function () {
+
   beforeEach(function () {
     cy.task("db:seed");
     cy.intercept("POST", "/users").as("signup");
@@ -151,4 +152,5 @@ describe("User Sign-up and Login", function () {
       .and("have.text", "Username or password is invalid");
     cy.visualSnapshot("Sign In, Invalid Username, Username or Password is Invalid");
   });
+
 });

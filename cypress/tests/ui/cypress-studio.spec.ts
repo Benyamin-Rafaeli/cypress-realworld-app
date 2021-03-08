@@ -1,6 +1,6 @@
 import { User } from "models";
 
-describe("Cypress Studio Demo", function() {
+xdescribe("Cypress Studio Demo", function() {
   beforeEach(function() {
     cy.task("db:seed");
 
