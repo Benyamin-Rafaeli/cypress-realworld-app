@@ -23,7 +23,7 @@ import {
   intersectionWith,
   compact,
   differenceBy,
-  sampleSize,
+  sampleSize
 } from "lodash/fp";
 import {
   BankAccount,
@@ -43,7 +43,7 @@ import {
   Contact,
   BankTransferType,
   BankTransfer,
-  PaymentNotificationStatus,
+  PaymentNotificationStatus
 } from "../src/models";
 import { getFakeAmount } from "../src/utils/transactionUtils";
 
@@ -78,27 +78,27 @@ export const passwordHash = bcrypt.hashSync(defaultPassword, 10);
 const requestScenarios: TransactionScenario[] = [
   {
     status: TransactionStatus.pending,
-    requestStatus: "pending",
+    requestStatus: "pending"
   },
   {
     status: TransactionStatus.complete,
-    requestStatus: "accepted",
+    requestStatus: "accepted"
   },
   {
     status: TransactionStatus.complete,
-    requestStatus: "rejected",
-  },
+    requestStatus: "rejected"
+  }
 ];
 
 const paymentScenarios: TransactionScenario[] = [
   {
     status: TransactionStatus.pending,
-    requestStatus: "",
+    requestStatus: ""
   },
   {
     status: TransactionStatus.complete,
-    requestStatus: "",
-  },
+    requestStatus: ""
+  }
 ];
 
 export const getRandomTransactions = (baseCount: number, baseTransactions: Transaction[]) =>
@@ -128,11 +128,11 @@ export const createFakeUser = (): User => {
     defaultPrivacyLevel: faker.helpers.randomize([
       DefaultPrivacyLevel.public,
       DefaultPrivacyLevel.private,
-      DefaultPrivacyLevel.contacts,
+      DefaultPrivacyLevel.contacts
     ]),
     balance: faker.random.number({ min: 10000, max: 200000 }),
     createdAt: faker.date.past(),
-    modifiedAt: faker.date.recent(),
+    modifiedAt: faker.date.recent()
   };
 };
 
@@ -145,7 +145,7 @@ export const createContact = (userId: User["id"], contactUserId: User["id"]) => 
   userId,
   contactUserId,
   createdAt: faker.date.past(),
-  modifiedAt: faker.date.recent(),
+  modifiedAt: faker.date.recent()
 });
 
 // returns a random user other than the one passed in
@@ -162,7 +162,7 @@ export const randomContactsForUser = curry((seedUsers: User[], user: User) =>
 export const generateRandomContactsForUser = (seedUsers: User[]) =>
   map((user: User) => ({
     userId: user.id,
-    contacts: randomContactsForUser(seedUsers, user),
+    contacts: randomContactsForUser(seedUsers, user)
   }))(seedUsers);
 
 export const createContactsForUser = curry((randomContacts: any) =>
@@ -189,7 +189,7 @@ export const createSeedBankAccounts = (seedUsers: User[]) =>
         routingNumber: faker.finance.account(9),
         isDeleted: false,
         createdAt: faker.date.past(),
-        modifiedAt: faker.date.recent(),
+        modifiedAt: faker.date.recent()
       };
     }
   )(seedUsers);
@@ -216,7 +216,7 @@ export const createTransaction = (
     if (status === TransactionStatus.complete) {
       requestStatus = faker.helpers.randomize([
         TransactionRequestStatus.accepted,
-        TransactionRequestStatus.rejected,
+        TransactionRequestStatus.rejected
       ]);
     }
   }
@@ -237,7 +237,7 @@ export const createTransaction = (
     privacyLevel: faker.helpers.randomize([
       DefaultPrivacyLevel.public,
       DefaultPrivacyLevel.private,
-      DefaultPrivacyLevel.contacts,
+      DefaultPrivacyLevel.contacts
     ]),
     receiverId,
     senderId,
@@ -246,7 +246,7 @@ export const createTransaction = (
     requestStatus,
     requestResolvedAt,
     createdAt,
-    modifiedAt,
+    modifiedAt
   };
 };
 
@@ -255,13 +255,13 @@ export const createPayment = (account: BankAccount, user: User, randomUser: User
     const paymentTransaction = createTransaction("payment", account, {
       senderId: user.id,
       receiverId: randomUser.id,
-      ...details,
+      ...details
     });
 
     const paymentInverseTransaction = createTransaction("payment", account, {
       senderId: randomUser.id,
       receiverId: user.id,
-      ...details,
+      ...details
     });
 
     return [paymentTransaction, paymentInverseTransaction];
@@ -275,13 +275,13 @@ export const createRequest = (account: BankAccount, user: User, randomUser: User
     const requestTransaction = createTransaction("request", account, {
       senderId: user.id,
       receiverId: randomUser.id,
-      ...details,
+      ...details
     });
 
     const requestInverseTransaction = createTransaction("request", account, {
       senderId: randomUser.id,
       receiverId: user.id,
-      ...details,
+      ...details
     });
 
     return [requestTransaction, requestInverseTransaction];
@@ -341,7 +341,7 @@ export const createFakeLike = (userId: string, transactionId: string): Like => (
   userId,
   transactionId,
   createdAt: faker.date.past(),
-  modifiedAt: faker.date.recent(),
+  modifiedAt: faker.date.recent()
 });
 
 export const getPublicTransactionsForOtherUsers = (
@@ -380,7 +380,7 @@ export const createFakeComment = (userId: string, transactionId: string): Commen
   userId,
   transactionId,
   createdAt: faker.date.past(),
-  modifiedAt: faker.date.recent(),
+  modifiedAt: faker.date.recent()
 });
 
 export const createSeedComments = (seedUsers: User[], seedTransactions: Transaction[]) =>
@@ -411,7 +411,7 @@ export const createFakePaymentNotification = (
   status,
   isRead: false,
   createdAt: faker.date.past(),
-  modifiedAt: faker.date.recent(),
+  modifiedAt: faker.date.recent()
 });
 
 export const createFakeLikeNotification = (
@@ -426,7 +426,7 @@ export const createFakeLikeNotification = (
   transactionId,
   isRead: false,
   createdAt: faker.date.past(),
-  modifiedAt: faker.date.recent(),
+  modifiedAt: faker.date.recent()
 });
 
 export const createFakeCommentNotification = (
@@ -441,7 +441,7 @@ export const createFakeCommentNotification = (
   transactionId,
   isRead: false,
   createdAt: faker.date.past(),
-  modifiedAt: faker.date.recent(),
+  modifiedAt: faker.date.recent()
 });
 
 const getTransactionsWithLikes = (transactions: Transaction[], seedLikes: Like[]) =>
@@ -529,7 +529,7 @@ export const createBankTransfer = (
   type: transferType,
   transactionId,
   createdAt: faker.date.past(),
-  modifiedAt: faker.date.recent(),
+  modifiedAt: faker.date.recent()
 });
 
 export const createSeedBankTransfers = (
@@ -598,6 +598,6 @@ export const buildDatabase = () => {
     likes: seedLikes,
     comments: seedComments,
     notifications: seedNotifications,
-    banktransfers: seedBankTransfers,
+    banktransfers: seedBankTransfers
   };
 };

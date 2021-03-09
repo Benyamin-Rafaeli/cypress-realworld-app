@@ -97,7 +97,7 @@ linux-workflow: &linux-workflow
         parallel: true
         parallelism: 1
         ci-build-id: ${CIRCLE_SHA1:0:8}
-        group: "UI - Chrome - Mobile"
+        group: "UI - Chrome"
         requires:
           - Setup Linux
         post-steps:

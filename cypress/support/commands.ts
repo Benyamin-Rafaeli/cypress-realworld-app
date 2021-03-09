@@ -43,10 +43,6 @@ Cypress.Commands.add("login", (username, password, rememberUser = false) => {
     autoEnd: false
   });
 
-  // cy.server();
-  // cy.route("POST", "/login").as("loginUser");
-  // cy.route("GET", "checkAuth").as("getUserProfile");
-  // updated
   cy.intercept("POST", "/login").as("loginUser");
   cy.intercept("GET", "checkAuth").as("getUserProfile");
 
@@ -133,10 +129,6 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
     autoEnd: false
   });
 
-  // cy.server();
-  // cy.route("POST", "/login").as("loginUser");
-  // cy.route("GET", "/checkAuth").as("getUserProfile");
-  // updated
   cy.intercept("POST", "/login").as("loginUser");
   cy.intercept("GET", "/checkAuth").as("getUserProfile");
 
@@ -164,9 +156,6 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
 });
 
 Cypress.Commands.add("logoutByXstate", () => {
-  // cy.server();
-  // cy.route("POST", "/logout").as("logoutUser");
-  // updated
   cy.intercept("POST", "/logout").as("logoutUser");
 
   const log = Cypress.log({
